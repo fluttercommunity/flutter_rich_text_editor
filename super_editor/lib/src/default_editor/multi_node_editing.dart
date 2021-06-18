@@ -201,14 +201,8 @@ class DeleteSelectionCommand implements EditorCommand {
     //       the deletion. This is a fragile relationship between the
     //       composer and the editor and needs to be addressed.
     _log.log('_deleteBinaryNode', ' - replacing BinaryNode with a ParagraphNode: ${node.id}');
-    final nodeIndex = document.getNodeIndex(node);
-    transaction.insertNodeAt(
-      nodeIndex,
-      ParagraphNode(
-        id: node.id,
-        text: AttributedText(),
-      ),
-    );
-    transaction.deleteNode(node);
+
+    final newNode = ParagraphNode(id: node.id, text: AttributedText());
+    transaction.replaceNode(oldNode: node, newNode: newNode);
   }
 }

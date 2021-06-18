@@ -1288,13 +1288,10 @@ class CommonEditorOperations {
       final newNode = hasUnorderedListItemMatch
           ? ListItemNode.unordered(id: node.id, text: adjustedText)
           : ListItemNode.ordered(id: node.id, text: adjustedText);
-      final nodeIndex = editor.document.getNodeIndex(node);
 
       editor.executeCommand(
         EditorCommandFunction((document, transaction) {
-          transaction
-            ..deleteNodeAt(nodeIndex)
-            ..insertNodeAt(nodeIndex, newNode);
+          transaction.replaceNode(oldNode: node, newNode: newNode);
         }),
       );
 
@@ -1355,13 +1352,10 @@ class CommonEditorOperations {
         text: adjustedText,
         metadata: {'blockType': blockquoteAttribution},
       );
-      final nodeIndex = editor.document.getNodeIndex(node);
 
       editor.executeCommand(
         EditorCommandFunction((document, transaction) {
-          transaction
-            ..deleteNodeAt(nodeIndex)
-            ..insertNodeAt(nodeIndex, newNode);
+          transaction.replaceNode(oldNode: node, newNode: newNode);
         }),
       );
 
@@ -1447,13 +1441,10 @@ class CommonEditorOperations {
       id: node.id,
       imageUrl: url,
     );
-    final nodeIndex = document.getNodeIndex(node);
 
     editor.executeCommand(
       EditorCommandFunction((document, transaction) {
-        transaction
-          ..deleteNodeAt(nodeIndex)
-          ..insertNodeAt(nodeIndex, imageNode);
+        transaction.replaceNode(oldNode: node, newNode: imageNode);
       }),
     );
 
@@ -1629,16 +1620,12 @@ class CommonEditorOperations {
         final paragraphPosition = composer.selection!.extent.nodePosition as TextNodePosition;
         final endOfParagraph = node.endPosition;
 
-        final nodeIndex = editor.document.getNodeIndex(node);
-
         DocumentSelection newSelection;
         if (node.text.text.isEmpty) {
           // Convert empty paragraph to HR.
           final imageNode = ImageNode(id: nodeId, imageUrl: url);
 
-          transaction
-            ..deleteNodeAt(nodeIndex)
-            ..insertNodeAt(nodeIndex, imageNode);
+          transaction.replaceNode(oldNode: node, newNode: imageNode);
 
           newSelection = DocumentSelection.collapsed(
             position: DocumentPosition(
@@ -1719,8 +1706,6 @@ class CommonEditorOperations {
       return false;
     }
 
-    final nodeIndex = editor.document.getNodeIndex(node);
-
     editor.executeCommand(
       EditorCommandFunction((document, transaction) {
         final paragraphPosition = composer.selection!.extent.nodePosition as TextNodePosition;
@@ -1731,9 +1716,7 @@ class CommonEditorOperations {
           // Convert empty paragraph to HR.
           final hrNode = HorizontalRuleNode(id: nodeId);
 
-          transaction
-            ..deleteNodeAt(nodeIndex)
-            ..insertNodeAt(nodeIndex, hrNode);
+          transaction.replaceNode(oldNode: node, newNode: hrNode);
 
           newSelection = DocumentSelection.collapsed(
             position: DocumentPosition(
@@ -1854,14 +1837,11 @@ class CommonEditorOperations {
       return false;
     }
 
-    final nodeIndex = editor.document.getNodeIndex(node);
     final newNode = ListItemNode(id: nodeId, itemType: type, text: text);
 
     editor.executeCommand(
       EditorCommandFunction((document, transaction) {
-        transaction
-          ..deleteNodeAt(nodeIndex)
-          ..insertNodeAt(nodeIndex, newNode);
+        transaction.replaceNode(oldNode: node, newNode: newNode);
 
         composer.selection = DocumentSelection.collapsed(
           position: DocumentPosition(
@@ -1896,14 +1876,11 @@ class CommonEditorOperations {
       return false;
     }
 
-    final nodeIndex = editor.document.getNodeIndex(node);
     final newNode = ParagraphNode(id: nodeId, metadata: {'blockType': blockquoteAttribution}, text: text);
 
     editor.executeCommand(
       EditorCommandFunction((document, transaction) {
-        transaction
-          ..deleteNodeAt(nodeIndex)
-          ..insertNodeAt(nodeIndex, newNode);
+        transaction.replaceNode(oldNode: node, newNode: newNode);
 
         composer.selection = DocumentSelection.collapsed(
           position: DocumentPosition(
@@ -1953,11 +1930,8 @@ class CommonEditorOperations {
             id: extentNode.id,
             text: extentNode.text,
           );
-          final extentNodeIndex = document.getNodeIndex(extentNode);
 
-          transaction
-            ..deleteNodeAt(extentNodeIndex)
-            ..insertNodeAt(extentNodeIndex, newParagraphNode);
+          transaction.replaceNode(oldNode: extentNode, newNode: newParagraphNode);
         }
       }),
     );

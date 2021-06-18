@@ -91,6 +91,14 @@ class DocumentEditorTransaction {
     _document.deleteNodeAt(index);
   }
 
+  /// Replaces the given [oldNode] with the given [newNode]
+  void replaceNode({
+    required DocumentNode oldNode,
+    required DocumentNode newNode,
+  }) {
+    _document.replaceNode(oldNode: oldNode, newNode: newNode);
+  }
+
   /// Deletes the given [node] from the [Document].
   bool deleteNode(DocumentNode node) {
     return _document.deleteNode(node);
@@ -237,6 +245,26 @@ class MutableDocument with ChangeNotifier implements Document {
     notifyListeners();
 
     return isRemoved;
+  }
+
+  /// Replaces the given [oldNode] with the given [newNode]
+  void replaceNode({
+    required DocumentNode oldNode,
+    required DocumentNode newNode,
+  }) {
+    final index = _nodes.indexOf(oldNode);
+
+    if (index != -1) {
+      oldNode.removeListener(_forwardNodeChange);
+      _nodes.removeAt(index);
+
+      newNode.addListener(_forwardNodeChange);
+      _nodes.insert(index, newNode);
+
+      notifyListeners();
+    } else {
+      throw Exception('Could not find oldNode: ${oldNode.id}');
+    }
   }
 
   void _forwardNodeChange() {

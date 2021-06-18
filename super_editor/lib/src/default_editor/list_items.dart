@@ -321,10 +321,7 @@ class ConvertListItemToParagraphCommand implements EditorCommand {
       text: listItem.text,
       metadata: paragraphMetadata ?? {},
     );
-    final listItemIndex = document.getNodeIndex(listItem);
-    transaction
-      ..deleteNodeAt(listItemIndex)
-      ..insertNodeAt(listItemIndex, newParagraphNode);
+    transaction.replaceNode(oldNode: listItem, newNode: newParagraphNode);
   }
 }
 
@@ -347,10 +344,7 @@ class ConvertParagraphToListItemCommand implements EditorCommand {
       itemType: type,
       text: paragraphNode.text,
     );
-    final paragraphIndex = document.getNodeIndex(paragraphNode);
-    transaction
-      ..deleteNodeAt(paragraphIndex)
-      ..insertNodeAt(paragraphIndex, newListItemNode);
+    transaction.replaceNode(oldNode: paragraphNode, newNode: newListItemNode);
   }
 }
 
@@ -372,10 +366,7 @@ class ChangeListItemTypeCommand implements EditorCommand {
       itemType: newType,
       text: existingListItem.text,
     );
-    final nodeIndex = document.getNodeIndex(existingListItem);
-    transaction
-      ..deleteNodeAt(nodeIndex)
-      ..insertNodeAt(nodeIndex, newListItemNode);
+    transaction.replaceNode(oldNode: existingListItem, newNode: newListItemNode);
   }
 }
 

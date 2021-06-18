@@ -79,10 +79,7 @@ class ConvertBlockquoteToParagraphCommand implements EditorCommand {
       id: blockquote.id,
       text: blockquote.text,
     );
-    final blockquoteNodeIndex = document.getNodeIndex(blockquote);
-    transaction
-      ..deleteNodeAt(blockquoteNodeIndex)
-      ..insertNodeAt(blockquoteNodeIndex, newParagraphNode);
+    transaction.replaceNode(oldNode: blockquote, newNode: newParagraphNode);
   }
 }
 
