@@ -688,7 +688,7 @@ class CommonEditorOperations {
     if (!_isTextEntryNode(document: editor.document, selection: composer.selection!)) {
       return false;
     }
-    if (composer.selection!.isCollapsed && (composer.selection!.extent.nodePosition as TextNodePosition).offset <= 0) {
+    if (composer.selection!.isCollapsed && (composer.selection!.extent.nodePosition as TextNodePosition).offset < 0) {
       return false;
     }
 
