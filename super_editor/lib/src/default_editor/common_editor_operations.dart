@@ -758,11 +758,12 @@ class CommonEditorOperations {
         } else if ((node as TextNode).text.text.isEmpty) {
           // The caret is at the beginning of an empty TextNode and the preceding
           // node is not a TextNode. Delete the current TextNode and move the
-          // selection up to the preceding node.
-          _moveSelectionToEndOfPrecedingNode();
-          editor.executeCommand(EditorCommandFunction((doc, transaction) {
-            transaction.deleteNode(node);
-          }));
+          // selection up to the preceding node if exist.
+          if (_moveSelectionToEndOfPrecedingNode()) {
+            editor.executeCommand(EditorCommandFunction((doc, transaction) {
+              transaction.deleteNode(node);
+            }));
+          }
           return true;
         } else {
           // The caret is at the beginning of a non-empty TextNode, and the
