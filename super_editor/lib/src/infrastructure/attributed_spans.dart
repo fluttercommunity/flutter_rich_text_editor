@@ -45,7 +45,7 @@ class AttributedSpans {
   /// with no spans.
   AttributedSpans({
     List<SpanMarker>? attributions,
-  }) : _attributions = attributions ?? [] {
+  }) : _attributions = [...?attributions] {
     _sortAttributions();
   }
 
